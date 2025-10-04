@@ -1,0 +1,19 @@
+# router_config.j2
+hostname {{ name }}
+kind: {{ kind }}
+image: {{ image }}
+
+{% if binds %}
+# Bind mounts
+{% for b in binds %}
+  - {{ b }}
+{% endfor %}
+{% endif %}
+
+# Connected links
+{% for link in links %}
+{% set left, right = link.endpoints %}
+{% if name in left or name in right %}
+#   {{ left }}  <-->  {{ right }}
+{% endif %}
+{% endfor %}
