@@ -16,7 +16,7 @@ output_dir.mkdir(exist_ok=True)
 
 for node_name, node_data in topo["topology"]["nodes"].items():
     kind  = node_data["kind"]
-    image = node_data["image"] 
+    image = node_data["image"]
     binds = node_data.get("binds", [])
     
     config = template.render(
@@ -25,10 +25,14 @@ for node_name, node_data in topo["topology"]["nodes"].items():
     image=node_data["image"],
     links=topo["topology"]["links"],
     binds=node_data.get("binds", []))
+    stripped_config = "\n".join(line for line in config.splitlines() if line.strip())
+
+
+    #print(stripped_config)
 
     outfile = output_dir / f"{node_name}.cfg"
     with outfile.open("w") as f:
-        f.write(config)
+        f.write(stripped_config)
 
     print(f"✅ wrote {outfile}")
 
